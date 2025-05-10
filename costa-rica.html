@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Costa Rica Secret - Stefan's Kitchen</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .secret-container {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .atasco-image {
+            width: 700px;
+            height: 500px;
+            max-width: 100%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="secret-container">
+            <img src="images/atasco.jpg" alt="Traffic jam in Costa Rica" class="atasco-image">
+            
+            <div>
+                <a href="index.html" class="home-button">Back to Home</a>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="trafficSound">
+        <source src="sounds/traffic.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+    
+    <script>
+        // Handle audio playback with user interaction
+        document.addEventListener('DOMContentLoaded', function() {
+            const trafficSound = document.getElementById('trafficSound');
+            
+            // Try to play the audio
+            const playPromise = trafficSound.play();
+            
+            // Handle autoplay restrictions
+            if (playPromise !== undefined) {
+                playPromise.catch(error => {
+                    console.log("Autoplay prevented due to browser policies.");
+                    
+                    // Create a play button as a fallback
+                    const audioPlayButton = document.createElement('button');
+                    audioPlayButton.textContent = 'Play Traffic Sound';
+                    audioPlayButton.className = 'home-button';
+                    audioPlayButton.style.marginRight = '10px';
+                    audioPlayButton.style.backgroundColor = '#27ae60';
+                    
+                    // Add click event to play audio
+                    audioPlayButton.addEventListener('click', () => {
+                        trafficSound.play();
+                        audioPlayButton.style.display = 'none'; // Hide button after playing
+                    });
+                    
+                    // Insert button before the home button
+                    const homeButton = document.querySelector('.home-button');
+                    homeButton.parentNode.insertBefore(audioPlayButton, homeButton);
+                });
+            }
+        });
+        
+        // Add a click event listener to the document to play audio on first user interaction
+        document.addEventListener('click', function initialClickHandler() {
+            const trafficSound = document.getElementById('trafficSound');
+            trafficSound.play().catch(error => console.log("Still couldn't play audio"));
+            // Remove this event listener after first click
+            document.removeEventListener('click', initialClickHandler);
+        }, { once: true });
+    </script>
+</body>
+</html>
